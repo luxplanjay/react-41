@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useModal } from 'hooks';
 
 const EditMaterialModal = ({ onClose, onEdit }) => {
   return (
@@ -20,38 +20,34 @@ const EditMaterialModal = ({ onClose, onEdit }) => {
   );
 };
 
-export class Material extends Component {
-  state = {
-    isModalOpen: false,
-  };
+export const Material = ({ item, onUpdate, onDelete }) => {
+  const { isModalOpen, closeModal, openModal } = useModal();
+  // Кастомный хук useModal закрывает в себе такую логику
+  // Ее можно было писать тут вручную вот так
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  // const openModal = () => setIsModalOpen(true);
+  // const closeModal = () => setIsModalOpen(false);
 
-  openModal = () => this.setState({ isModalOpen: true });
-  closeModal = () => this.setState({ isModalOpen: false });
-
-  render() {
-    const { item, onUpdate, onDelete } = this.props;
-    const { isModalOpen } = this.state;
-    return (
-      <div>
-        <p>
-          <b>Название:</b> {item.title}
-        </p>
-        <p>
-          <b>Ссылка:</b> {item.link}
-        </p>
-        <button type="button" onClick={() => onDelete(item.id)}>
-          Удалить
-        </button>
-        <button type="button" onClick={this.openModal}>
-          Редактировать
-        </button>
-        {isModalOpen && (
-          <EditMaterialModal
-            onClose={this.closeModal}
-            onEdit={() => onUpdate({ id: item.id, title: Date.now() })}
-          />
-        )}
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <p>
+        <b>Название:</b> {item.title}
+      </p>
+      <p>
+        <b>Ссылка:</b> {item.link}
+      </p>
+      <button type="button" onClick={() => onDelete(item.id)}>
+        Удалить
+      </button>
+      <button type="button" onClick={openModal}>
+        Редактировать
+      </button>
+      {isModalOpen && (
+        <EditMaterialModal
+          onClose={closeModal}
+          onEdit={() => onUpdate({ id: item.id, title: Date.now() })}
+        />
+      )}
+    </div>
+  );
+};
