@@ -1,3 +1,13 @@
-import styled from 'styled-components';
+import { Outlet } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import { GlobalStyle } from './GlobalStyle';
 
-export const Layout = styled.main``;
+export const Layout = () => {
+  return (
+    <>
+      <GlobalStyle />
+      <Toaster />
+      <Outlet />
+    </>
+  );
+};
