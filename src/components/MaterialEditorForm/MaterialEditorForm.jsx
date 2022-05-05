@@ -1,13 +1,17 @@
 import { Formik, Form, Field } from 'formik';
 
-export const MaterialEditorForm = ({ onSubmit }) => {
+export const MaterialEditorForm = ({
+  initialValues = { title: '', link: '' },
+  onSubmit,
+  btnText,
+}) => {
   const handleSubmit = async (values, actions) => {
     await onSubmit(values);
     actions.setSubmitting(false);
     actions.resetForm();
   };
   return (
-    <Formik initialValues={{ title: '', link: '' }} onSubmit={handleSubmit}>
+    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
       {({ isSubmitting }) => (
         <Form>
           <label>
@@ -21,7 +25,7 @@ export const MaterialEditorForm = ({ onSubmit }) => {
           </label>
           <br />
           <button type="submit" disabled={isSubmitting}>
-            Добавить материал
+            {btnText}
           </button>
         </Form>
       )}

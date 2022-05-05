@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { MaterialList } from 'components/MaterialList/MaterialList';
 import * as API from 'services/api';
 
@@ -35,6 +35,10 @@ export const ListPage = () => {
     fetchMaterials();
   }, []);
 
+  useEffect(() => {
+    console.log('UPDATE');
+  });
+
   return (
     <div>
       <button type="button" onClick={() => navigate('/create')}>
@@ -55,6 +59,7 @@ export const ListPage = () => {
           onUpdate={() => null}
         />
       )}
+      <Outlet />
     </div>
   );
 };

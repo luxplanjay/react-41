@@ -17,6 +17,11 @@ export const deleteMaterial = async id => {
   return response.data;
 };
 
+export const getMaterialById = async id => {
+  const response = await axios.get(`/materials/${id}`);
+  return response.data;
+};
+
 export const updateMaterial = async fields => {
   const response = await axios.put(`/materials/${fields.id}`, fields);
   return response.data;

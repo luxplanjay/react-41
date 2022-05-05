@@ -19,7 +19,7 @@ export const CreateMaterialPage = () => {
   return (
     <>
       <BackLink href="/list" label="К списку материалов" />
-      <MaterialEditorForm onSubmit={addMaterial} />
+      <MaterialEditorForm btnText="Добавить материал" onSubmit={addMaterial} />
     </>
   );
 };
