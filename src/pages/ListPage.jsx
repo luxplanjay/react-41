@@ -1,43 +1,10 @@
-import { useState, useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { MaterialList } from 'components/MaterialList/MaterialList';
-import * as API from 'services/api';
+import { useGetMaterialsQuery } from 'redux/materialsSlice';
 
 export const ListPage = () => {
   const navigate = useNavigate();
-  const [materials, setMaterials] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
-
-  const deleteMaterial = async id => {
-    try {
-      await API.deleteMaterial(id);
-      setMaterials(materials => materials.filter(m => m.id !== id));
-    } catch (error) {
-      setError(true);
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    async function fetchMaterials() {
-      try {
-        setIsLoading(true);
-        const materials = await API.getMaterials();
-        setMaterials(materials);
-        setIsLoading(false);
-      } catch (error) {
-        setError(true);
-        setIsLoading(false);
-        console.log(error);
-      }
-    }
-    fetchMaterials();
-  }, []);
-
-  useEffect(() => {
-    console.log('UPDATE');
-  });
+  const { data: materials, error, isLoading } = useGetMaterialsQuery();
 
   return (
     <div>
@@ -53,11 +20,7 @@ export const ListPage = () => {
       {isLoading ? (
         <b>Загружаем материалы</b>
       ) : (
-        <MaterialList
-          items={materials}
-          onDelete={deleteMaterial}
-          onUpdate={() => null}
-        />
+        <MaterialList items={materials} />
       )}
       <Outlet />
     </div>

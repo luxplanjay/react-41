@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router-dom';
+import { useDeleteMaterialMutation } from 'redux/materialsSlice';
 
-export const Material = ({ item, onUpdate, onDelete }) => {
+export const Material = ({ item }) => {
   const navigate = useNavigate();
+  const [deleteMaterial, { isLoading }] = useDeleteMaterialMutation();
 
   return (
     <div>
@@ -11,7 +13,11 @@ export const Material = ({ item, onUpdate, onDelete }) => {
       <p>
         <b>Ссылка:</b> {item.link}
       </p>
-      <button type="button" onClick={() => onDelete(item.id)}>
+      <button
+        type="button"
+        onClick={() => deleteMaterial(item.id)}
+        disabled={isLoading}
+      >
         Удалить
       </button>
       <button type="button" onClick={() => navigate(`/list/edit/${item.id}`)}>
