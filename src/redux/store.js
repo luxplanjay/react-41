@@ -9,4 +9,5 @@ export const store = configureStore({
     ...getDefaultMiddleware(),
     materialsApi.middleware,
   ],
+  devTools: process.env.NODE_ENV !== 'production',
 });

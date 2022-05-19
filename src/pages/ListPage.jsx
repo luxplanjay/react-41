@@ -1,6 +1,7 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import { MaterialList } from 'components/MaterialList/MaterialList';
 import { useGetMaterialsQuery } from 'redux/materialsSlice';
+import { Filter } from 'components/Filter/Filter';
 
 export const ListPage = () => {
   const navigate = useNavigate();
@@ -11,6 +12,8 @@ export const ListPage = () => {
       <button type="button" onClick={() => navigate('/create')}>
         Добавить материал
       </button>
+      <hr />
+      <Filter />
       {error && (
         <p>
           Ой! Что-то пошло не так :( Перезагрузите страницу и попробуйте еще
