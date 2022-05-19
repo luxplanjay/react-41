@@ -2,10 +2,39 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { MaterialList } from 'components/MaterialList/MaterialList';
 import { useGetMaterialsQuery } from 'redux/materialsSlice';
 import { Filter } from 'components/Filter/Filter';
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { createSelector } from '@reduxjs/toolkit';
+
+const useMaterials = () => {
+  const filter = useSelector(state => state.filter.value);
+
+  const selectFilteredMaterials = useMemo(() => {
+    return createSelector(
+      [response => response.data, (_, filter) => filter],
+      (materials, filter) => {
+        return (
+          materials?.filter(m =>
+            m.title.toLowerCase().includes(filter.toLowerCase())
+          ) ?? []
+        );
+      }
+    );
+  }, []);
+
+  return useGetMaterialsQuery(undefined, {
+    selectFromResult(result) {
+      return {
+        ...result,
+        filteredMaterials: selectFilteredMaterials(result, filter),
+      };
+    },
+  });
+};
 
 export const ListPage = () => {
   const navigate = useNavigate();
-  const { data: materials, error, isLoading } = useGetMaterialsQuery();
+  const { filteredMaterials, isLoading, error } = useMaterials();
 
   return (
     <div>
@@ -23,7 +52,7 @@ export const ListPage = () => {
       {isLoading ? (
         <b>Загружаем материалы</b>
       ) : (
-        <MaterialList items={materials} />
+        <MaterialList items={filteredMaterials} />
       )}
       <Outlet />
     </div>
